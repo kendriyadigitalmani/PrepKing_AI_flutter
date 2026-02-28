@@ -1,0 +1,48 @@
+name: Build Flutter Web & Push to Dist Branch
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build Flutter Web
+        run: flutter build web --release --base-href "/"
+
+      - name: Push build/web to 'dist' branch
+        run: |
+          git clone --branch dist https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git dist_folder 2>/dev/null || git clone https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git dist_folder
+          
+          cd dist_folder
+          
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          
+          git checkout -B dist 2>/dev/null || git checkout dist
+          
+          rm -rf *
+          cp -r ../build/web/* .
+          
+          if [ -f "../web/.htaccess" ]; then
+            cp ../web/.htaccess .
+          fi
+          
+          git add .
+          git commit -m "Auto-deploy: ${{ github.sha }}" || echo "No changes to commit"
+          git push origin dist --force
