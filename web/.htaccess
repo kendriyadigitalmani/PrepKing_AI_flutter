@@ -1,8 +1,41 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
-  RewriteBase /
+  # 🎯 CRITICAL: Match your Hostinger Directory path exactly
+  RewriteBase /Prepking_AI_project/web4/
   RewriteRule ^index\.html$ - [L]
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule . /index.html [L]
+</IfModule>
+
+# 🚫 DISABLE CACHING FOR FLUTTER WEB ASSETS
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType application/javascript "access plus 0 seconds"
+  ExpiresByType text/css "access plus 0 seconds"
+  ExpiresByType image/png "access plus 1 week"
+  ExpiresByType image/svg+xml "access plus 1 week"
+  ExpiresByType font/woff2 "access plus 1 month"
+</IfModule>
+
+<IfModule mod_headers.c>
+  # Prevent caching of HTML/JS/CSS
+  <FilesMatch "\.(html|htm|js|css)$">
+    Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0, proxy-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires "Wed, 11 Jan 1984 05:00:00 GMT"
+    Header unset ETag
+  </FilesMatch>
+  # Allow caching for images/fonts (optional performance boost)
+  <FilesMatch "\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|otf)$">
+    Header set Cache-Control "public, max-age=604800, immutable"
+  </FilesMatch>
+</IfModule>
+
+# 🔒 Security headers (optional but recommended)
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set X-XSS-Protection "1; mode=block"
 </IfModule>
