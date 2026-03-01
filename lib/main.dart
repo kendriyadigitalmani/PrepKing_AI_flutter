@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 // 🏷️ VERSION TRACKING - Update this when you deploy a new version
-const String appVersion = 'v2.1.1 mani mani';
+const String appVersion = 'v2.1.1 mani mani dubey ji';
 const String buildDate = '01-Mar-2026';
 
 void main() { runApp(const PrepKingAIApp()); }
