@@ -38,6 +38,10 @@ jobs:
           
           rm -rf *
           cp -r ../build/web/* .
+                    # 🚀 AUTO CACHE-BUSTING: Add unique version param to JS/CSS files
+          TIMESTAMP=$(date +%s%N)
+          find . -name "*.html" -exec sed -i "s|src=\"\(.*\.js\)\"|src=\"\1?v=$TIMESTAMP\"|g" {} \;
+          find . -name "*.html" -exec sed -i "s|href=\"\(.*\.css\)\"|href=\"\1?v=$TIMESTAMP\"|g" {} \;
           
           if [ -f "../web/.htaccess" ]; then
             cp ../web/.htaccess .
