@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+// 🏷️ VERSION TRACKING - Update this when you deploy a new version
+const String appVersion = 'v2.1.0';
+const String buildDate = '01-Mar-2026';
+
 void main() { runApp(const PrepKingAIApp()); }
 
 class PrepKingAIApp extends StatelessWidget {
@@ -47,6 +51,47 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     return Scaffold(
       body: Stack(children: [
         _AnimatedGradientBackground(),
+        
+        // 🏷️ VERSION BADGE - Top Right Corner (Large & Visible)
+        Positioned(
+          top: 10,
+          right: 10,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            decoration: BoxDecoration(
+              color: Colors.amber.withOpacity(0.9),
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  appVersion,
+                  style: const TextStyle(
+                    color: Colors.black87,
+                    fontSize: 18, // Large font for easy visibility
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  buildDate,
+                  style: TextStyle(
+                    color: Colors.black54,
+                    fontSize: 11,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        
         SafeArea(child: SingleChildScrollView(child: Column(children: [
           _buildHeroSection(isMobile),
           _buildFeaturesSection(isMobile),
